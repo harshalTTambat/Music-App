@@ -1,3 +1,4 @@
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.ListIterator;
@@ -46,27 +47,122 @@ public class Main {
         // printing menu of options for user
         printMenu();
 
-        Scanner sc = new Scanner(System.in);
-        System.out.println("Enter your option");
-
-        //taking option input
-        int option = sc.nextInt();
-
         ListIterator <Song> listIterator = playList.listIterator();
 
+        boolean forward = true; // this is one step ahead initially
          if (playList.size() > 0 )
             {
-                System.out.println("Playing the first song " + playList.get(0).toString());
+                System.out.println("Playing the first song");
+                System.out.println(listIterator.next().toString());
             }
          else
             {
                 System.out.println("Oops!!.. PlayList is Empty");
+                return;
             }
 
+         System.out.println("Enter your option");
+         boolean quit = false;
+         Scanner sc = new Scanner(System.in);
 
+        while (! quit)
+        {
+            //taking option input from user
+            int option = sc.nextInt();
 
+           // swich case
+            switch(option)
+            {
+                case 0:
+                    quit = true;
+                    break;
+                case 1:
+                    if(forward==false){ //One step behind
+                        listIterator.next(); //Take one step step forward
+                        forward=true; //Now its on the right side of that number
+                    }
+                    if(listIterator.hasNext()){ //If it has another option
+                        System.out.println("Next Song"+listIterator.next().toString());
+                        forward = true;
+                    }else{
+                        System.out.println("You are at the last song");
+                        forward = false;
+                    }
+                    break;
+                case 2:
+                    if(forward==true){ //Extra 1 step ahead
+                        listIterator.previous(); //Move one step back
+                        forward = false; //right position --> forward var
+                    }
+                    if(listIterator.hasPrevious()){
+                        System.out.println("Previous song playing "+listIterator.previous().toString());
+                        forward = false;
+                    }else{
+                        System.out.println("You are at the first song");
+                        forward = false;
+                    }
+                    break;
+                case 3:
+                    if(forward==true){
 
+                        if(listIterator.hasPrevious()){
+                            System.out.println("Repeating the song "+listIterator.previous().toString());
+                            forward = false;
+                        }
+
+                    }else{ //forward variable is false
+
+                        if(listIterator.hasNext()){
+                            System.out.println("Repeating the song "+listIterator.next().toString());
+                            forward = true;
+                        }
+                    }
+                    break;
+                case 4:
+                    System.out.println("Printing all the songs");
+                    printSongs(playList);
+                case 5:
+                    printMenu();
+/*
+                case 6:              // delete current song
+                    if()
+                    {
+                        System.out.println("playList is already empty!...");
+                        break;
+                    }
+                    if (forward)
+                    {
+                        if(listIterator.hasNext())
+                        {
+                            listIterator.remove();
+                            System.out.println("song removed !!...");
+                            System.out.println("Now playing "+ listIterator.next().toString());
+                        }
+                    }
+                    else
+                    {
+                        if(listIterator.hasPrevious())
+                        {
+                            System.out.println("song removed !!...");
+                            System.out.println("Now playing "+ listIterator.previous().toString());
+                        }
+                    }
+                    break;
+
+ */
+
+            }
+        }
     }
+    public static void printSongs(LinkedList<Song> playList)
+    {
+        for(Song song: playList)
+        {
+            System.out.println(song.toString());
+        }
+    }
+
+
     private static void printMenu()
     {
         System.out.println("Available options\n press");
